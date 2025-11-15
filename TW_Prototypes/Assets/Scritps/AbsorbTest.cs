@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AbsorbTest : MonoBehaviour
@@ -8,7 +6,6 @@ public class AbsorbTest : MonoBehaviour
     [SerializeField] private int Health;
 
     [SerializeField] private float _parryWindowTime;
-    [SerializeField] private float _parryRadius = 0.5f;
 
     private Coroutine _parryCoroutine;
 
@@ -59,17 +56,5 @@ public class AbsorbTest : MonoBehaviour
         Debug.Log("Absorbing shot");
 
         Destroy(bullet.gameObject);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-
-        float Yoffset = 0.5f;
-
-        Vector3 OffsetPosition =
-            new Vector3(transform.position.x, transform.position.y + Yoffset, transform.position.z);
-
-        Gizmos.DrawSphere(OffsetPosition, _parryRadius);
     }
 }

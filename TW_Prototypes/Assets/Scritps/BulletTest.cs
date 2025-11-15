@@ -4,7 +4,12 @@ public class BulletTest : MonoBehaviour
 {
     [SerializeField] private int Damage;
 
-    private void Update()
+    private void FixedUpdate()
+    {
+        CheckPlayerHit();
+    }
+
+    private void CheckPlayerHit()
     {
         var player = Physics.OverlapSphere(transform.position, 0.5f);
 
@@ -12,7 +17,7 @@ public class BulletTest : MonoBehaviour
         {
             if (item.TryGetComponent<AbsorbTest>(out var hit))
             {
-                Debug.Log("Player Colpito");
+                Debug.Log("Player Hit");
 
                 if (hit.TryGetHit(Damage, this))
                 {
