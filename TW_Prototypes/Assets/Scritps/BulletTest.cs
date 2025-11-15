@@ -4,24 +4,36 @@ public class BulletTest : MonoBehaviour
 {
     [SerializeField] private int Damage;
 
-    private void FixedUpdate()
+    [SerializeField] private int _frameInterval;
+
+
+    private float _frameCount;
+
+    private void Update()
     {
-        CheckPlayerHit();
+        _frameCount++;
+
+        if (_frameCount % _frameInterval == 0)
+        {
+            CheckPlayerHit();
+        }
     }
 
     private void CheckPlayerHit()
     {
-        var player = Physics.OverlapSphere(transform.position, 0.5f);
+        var players = Physics.OverlapSphere(transform.position, 0.3f);
 
-        foreach (var item in player)
+        foreach (var player in players)
         {
-            if (item.TryGetComponent<AbsorbTest>(out var hit))
+            if (player.TryGetComponent<AbsorbTest>(out var hit))
             {
                 Debug.Log("Player Hit");
 
                 if (hit.TryGetHit(Damage, this))
                 {
                     Destroy(gameObject);
+
+                    //vai nella pool
                 }
             }
         }

@@ -1,8 +1,17 @@
-using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private InputActionAsset _inputActionAsset;
+
+    [SerializeField] private InputActionReference _moveAction;
+    [SerializeField] private InputActionReference _parryAction;
+
+    private Vector2 _moveVector;
+
+    private Vector3 _moveDir;
+
     public enum PlayerType
     {
         PLAYER1,
@@ -12,28 +21,50 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerType _playerType;
     [SerializeField] private float _moveSpeed;
 
+    private void OnEnable()
+    {
+        _inputActionAsset.Enable();
+
+        _moveAction.action.performed += OnMove;
+
+        _moveAction.action.canceled += StopMoving;
+
+        if (TryGetComponent<AbsorbTest>(out var absorbTest))
+        {
+            _parryAction.action.performed += absorbTest.CallParryCoroutine;
+        }
+    }
+
+    private void OnDisable()
+    {
+        _moveAction.action.performed -= OnMove;
+
+        _moveAction.action.canceled -= StopMoving;
+
+        if (TryGetComponent<AbsorbTest>(out var absorbTest))
+        {
+            _parryAction.action.performed -= absorbTest.CallParryCoroutine;
+        }
+    }
+
+
+    private void StopMoving(InputAction.CallbackContext obj)
+    {
+        _moveVector = Vector3.zero;
+    }
+
+    private void OnMove(InputAction.CallbackContext ctx)
+    {
+        _moveVector = ctx.ReadValue<Vector2>();
+    }
+
     void Update()
     {
-        var moveX = 0f;
-        var moveY = 0f;
-
-        switch (_playerType)
+        if (_moveVector != Vector2.zero)
         {
-            case PlayerType.PLAYER1:
-                moveX = Input.GetAxisRaw("Horizontal");
-                moveY = Input.GetAxisRaw("Vertical");
-                break;
+            _moveDir = new Vector3(_moveVector.x, _moveVector.y, 0);
 
-            case PlayerType.PLAYER2:
-                moveX = Input.GetAxisRaw("Horizontal2");
-                moveY = Input.GetAxisRaw("Vertical2");
-                break;
-            default:
-                Debug.Log("sono fuori dal tunnel");
-                throw new ArgumentOutOfRangeException();
+            transform.position += _moveDir * (_moveSpeed * Time.deltaTime);
         }
-
-        var movement = new Vector3(moveX, moveY, 0f).normalized;
-        transform.Translate(movement * (_moveSpeed * Time.deltaTime));
     }
 }

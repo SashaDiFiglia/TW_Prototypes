@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class AbsorbTest : MonoBehaviour
 {
@@ -8,20 +9,13 @@ public class AbsorbTest : MonoBehaviour
     [SerializeField] private float _parryWindowTime;
 
     private Coroutine _parryCoroutine;
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && _parryCoroutine == null)
-        {
-            _parryCoroutine = StartCoroutine(ParryCoroutine());
-        }
-    }
+    
 
     public bool TryGetHit(int damage, BulletTest bullet)
     {
         if (_parryCoroutine != null)
         {
-            TryAbsorbShot(bullet);
+            AbsorbShot(bullet);
 
             return false;
         }
@@ -31,9 +25,14 @@ public class AbsorbTest : MonoBehaviour
         return true;
     }
 
+    public void CallParryCoroutine(InputAction.CallbackContext obj)
+    {
+        _parryCoroutine = StartCoroutine(ParryCoroutine());
+    }
+
     private IEnumerator ParryCoroutine()
     {
-        Debug.Log("Sto assorbendo colpi");
+        Debug.Log(name + ": Sto assorbendo colpi");
 
         float timer = 0;
 
@@ -51,7 +50,7 @@ public class AbsorbTest : MonoBehaviour
         yield return null;
     }
 
-    private void TryAbsorbShot(BulletTest bullet)
+    private void AbsorbShot(BulletTest bullet)
     {
         Debug.Log("Absorbing shot");
 
