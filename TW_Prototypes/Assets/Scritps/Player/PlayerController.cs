@@ -3,23 +3,18 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private InputActionAsset _inputActionAsset;
+    [SerializeField] private float _moveSpeed;
 
+    [SerializeField] private InputActionAsset _inputActionAsset;
     [SerializeField] private InputActionReference _moveAction;
     [SerializeField] private InputActionReference _parryAction;
+    [SerializeField] private InputActionReference _shootAction;
+
 
     private Vector2 _moveVector;
 
     private Vector3 _moveDir;
 
-    public enum PlayerType
-    {
-        PLAYER1,
-        PLAYER2
-    }
-
-    [SerializeField] private PlayerType _playerType;
-    [SerializeField] private float _moveSpeed;
 
     private void OnEnable()
     {
@@ -29,9 +24,14 @@ public class PlayerController : MonoBehaviour
 
         _moveAction.action.canceled += StopMoving;
 
-        if (TryGetComponent<AbsorbTest>(out var absorbTest))
+        if (TryGetComponent<PlayerParry>(out var playerParry))
         {
-            _parryAction.action.performed += absorbTest.CallParryCoroutine;
+            _parryAction.action.started += playerParry.CallParryCoroutine;
+        }
+
+        if (TryGetComponent<PlayerShoot>(out var playerShoot))
+        {
+            _shootAction.action.started += playerShoot.CallShoot;
         }
     }
 
@@ -41,9 +41,14 @@ public class PlayerController : MonoBehaviour
 
         _moveAction.action.canceled -= StopMoving;
 
-        if (TryGetComponent<AbsorbTest>(out var absorbTest))
+        if (TryGetComponent<PlayerParry>(out var absorbTest))
         {
-            _parryAction.action.performed -= absorbTest.CallParryCoroutine;
+            _parryAction.action.started -= absorbTest.CallParryCoroutine;
+        }
+
+        if (TryGetComponent<PlayerShoot>(out var playerShoot))
+        {
+            _shootAction.action.started -= playerShoot.CallShoot;
         }
     }
 

@@ -1,21 +1,26 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class AbsorbTest : MonoBehaviour
+public class PlayerParry : MonoBehaviour
 {
     [SerializeField] private int Health;
 
     [SerializeField] private float _parryWindowTime;
 
-    private Coroutine _parryCoroutine;
+    [SerializeField] private PlayerType _playerType;
     
+    private Coroutine _parryCoroutine;
 
-    public bool TryGetHit(int damage, BulletTest bullet)
+    public event Action<PlayerType, Bullet> OnBulletAbsorbed;
+
+
+    public bool TryGetHit(int damage, Bullet bullet)
     {
         if (_parryCoroutine != null)
         {
-            AbsorbShot(bullet);
+            AbsorbBullet(bullet);
 
             return false;
         }
@@ -50,10 +55,18 @@ public class AbsorbTest : MonoBehaviour
         yield return null;
     }
 
-    private void AbsorbShot(BulletTest bullet)
+    private void AbsorbBullet(Bullet bullet)
     {
         Debug.Log("Absorbing shot");
 
-        Destroy(bullet.gameObject);
+        OnBulletAbsorbed?.Invoke(_playerType, bullet);
+
+        //Destroy(bullet.gameObject);
     }
+}
+
+public enum PlayerType
+{
+    PLAYER1,
+    PLAYER2
 }

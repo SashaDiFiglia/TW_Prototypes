@@ -1,11 +1,13 @@
+using System;
 using UnityEngine;
 
-public class BulletTest : MonoBehaviour
+public class Bullet : MonoBehaviour
 {
     [SerializeField] private int Damage;
 
     [SerializeField] private int _frameInterval;
 
+    public event Action<Bullet> OnHit;
 
     private float _frameCount;
 
@@ -25,15 +27,13 @@ public class BulletTest : MonoBehaviour
 
         foreach (var player in players)
         {
-            if (player.TryGetComponent<AbsorbTest>(out var hit))
+            if (player.TryGetComponent<PlayerParry>(out var hit))
             {
                 Debug.Log("Player Hit");
 
                 if (hit.TryGetHit(Damage, this))
                 {
-                    Destroy(gameObject);
-
-                    //vai nella pool
+                    OnHit?.Invoke(this);
                 }
             }
         }

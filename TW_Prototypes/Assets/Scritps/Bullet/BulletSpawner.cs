@@ -16,7 +16,17 @@ public class BulletSpawner : MonoBehaviour
         {
             _timer = 0;
 
-            Instantiate(bulletPrefab, transform.position, transform.rotation);
+            ShootBullet();
+
+            //Instantiate(bulletPrefab, transform.position, transform.rotation);
         }
+    }
+
+    private void ShootBullet()
+    {
+        var bullet = BulletPool.Instance.TryGetBullet();
+
+        bullet.transform.position = transform.position;
+        bullet.transform.rotation = transform.rotation;
     }
 }
