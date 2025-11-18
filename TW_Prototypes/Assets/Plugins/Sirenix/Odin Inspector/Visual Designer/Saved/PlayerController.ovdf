@@ -1,0 +1,23 @@
+OVDF v1.0
+PlayerController, Assembly-CSharp
+
+# $FFzHg4ETe2VNj8YPbVjMJ5
+Position: $root:8
++ [Sirenix.OdinInspector.FoldoutGroupAttribute]
+	GroupName = "Input Action System"
+	HideWhenChildrenAreInvisible = True
+
+# _moveSpeed
+Position: $root:7
+
+# _shootAction
+Position: $FFzHg4ETe2VNj8YPbVjMJ5:3
+
+# _parryAction
+Position: $FFzHg4ETe2VNj8YPbVjMJ5:2
+
+# _moveAction
+Position: $FFzHg4ETe2VNj8YPbVjMJ5:1
+
+# _inputActionAsset
+Position: $FFzHg4ETe2VNj8YPbVjMJ5:0
