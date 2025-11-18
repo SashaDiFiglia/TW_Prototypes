@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BulletPool : MonoBehaviour
@@ -48,16 +49,16 @@ public class BulletPool : MonoBehaviour
 
     public Bullet TryGetBullet()
     {
-        if (_bulletsPool.Count <= 0)
+        if (!_bulletsPool.Any())
         {
             return null;
         }
 
-        var bullet = _bulletsPool[0];
+        var bullet = _bulletsPool.First();
 
-        bullet.gameObject.SetActive(true);
+        //bullet.gameObject.SetActive(true);
 
-        _bulletsPool.RemoveAt(0);
+        _bulletsPool.Remove(bullet);
 
         return bullet;
     }

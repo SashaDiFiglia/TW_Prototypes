@@ -10,7 +10,10 @@ public class PlayerParry : MonoBehaviour
     [SerializeField] private float _parryWindowTime;
 
     [SerializeField] private PlayerType _playerType;
-    
+
+    [SerializeField] private MeshRenderer _shieldRenderer;
+
+
     private Coroutine _parryCoroutine;
 
     public event Action<PlayerType, Bullet> OnBulletAbsorbed;
@@ -20,7 +23,7 @@ public class PlayerParry : MonoBehaviour
     {
         if (_parryCoroutine != null)
         {
-            AbsorbBullet(bullet);
+            ParryBullet(bullet);
 
             return false;
         }
@@ -37,7 +40,9 @@ public class PlayerParry : MonoBehaviour
 
     private IEnumerator ParryCoroutine()
     {
-        Debug.Log(name + ": Sto assorbendo colpi");
+        //Debug.Log(name + ": Sto assorbendo colpi");
+
+        _shieldRenderer.enabled = true;
 
         float timer = 0;
 
@@ -50,18 +55,25 @@ public class PlayerParry : MonoBehaviour
 
         _parryCoroutine = null;
 
-        Debug.Log("Finito di assorbire");
+        _shieldRenderer.enabled = false;
+
+        //Debug.Log("Finito di assorbire");
 
         yield return null;
     }
 
-    private void AbsorbBullet(Bullet bullet)
+    private void ParryBullet(Bullet bullet)
     {
         Debug.Log("Absorbing shot");
 
         OnBulletAbsorbed?.Invoke(_playerType, bullet);
 
         //Destroy(bullet.gameObject);
+    }
+
+    public PlayerType GetPlayerType()
+    {
+        return _playerType;
     }
 }
 

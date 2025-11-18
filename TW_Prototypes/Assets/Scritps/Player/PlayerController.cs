@@ -1,9 +1,11 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _rotationSpeed;
 
     [SerializeField] private InputActionAsset _inputActionAsset;
     [SerializeField] private InputActionReference _moveAction;
@@ -11,10 +13,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputActionReference _shootAction;
 
 
-    private Vector2 _moveVector;
+    private Vector2 moveVector;
 
-    private Vector3 _moveDir;
+    private Vector3 moveDir;
 
+
+    private void Start()
+    {
+        StartCoroutine(SmoothRotationCoroutine());
+    }
+
+    void Update()
+    {
+        if (moveVector != Vector2.zero)
+        {
+            moveDir = new Vector3(moveVector.x, moveVector.y, 0);
+
+            transform.position += moveDir * (_moveSpeed * Time.deltaTime);
+
+            //transform.forward = moveDir;
+        }
+    }
 
     private void OnEnable()
     {
@@ -41,9 +60,9 @@ public class PlayerController : MonoBehaviour
 
         _moveAction.action.canceled -= StopMoving;
 
-        if (TryGetComponent<PlayerParry>(out var absorbTest))
+        if (TryGetComponent<PlayerParry>(out var playerParry))
         {
-            _parryAction.action.started -= absorbTest.CallParryCoroutine;
+            _parryAction.action.started -= playerParry.CallParryCoroutine;
         }
 
         if (TryGetComponent<PlayerShoot>(out var playerShoot))
@@ -52,24 +71,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private IEnumerator SmoothRotationCoroutine()
+    {
+        while (true)
+        {
+            if (moveDir.magnitude < 0.001f)
+            {
+                yield return null;
+
+                continue;
+            }
+
+            var targetRotation = Quaternion.LookRotation(moveDir, -Vector3.forward);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _moveSpeed);
+
+            yield return null;
+        }
+    }
+
 
     private void StopMoving(InputAction.CallbackContext obj)
     {
-        _moveVector = Vector3.zero;
+        moveVector = Vector3.zero;
     }
 
     private void OnMove(InputAction.CallbackContext ctx)
     {
-        _moveVector = ctx.ReadValue<Vector2>();
-    }
-
-    void Update()
-    {
-        if (_moveVector != Vector2.zero)
-        {
-            _moveDir = new Vector3(_moveVector.x, _moveVector.y, 0);
-
-            transform.position += _moveDir * (_moveSpeed * Time.deltaTime);
-        }
+        moveVector = ctx.ReadValue<Vector2>();
     }
 }

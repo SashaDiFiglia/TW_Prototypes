@@ -26,7 +26,11 @@ public class BulletSpawner : MonoBehaviour
     {
         var bullet = BulletPool.Instance.TryGetBullet();
 
+        bullet.SetFactionToDealDamage(Faction.ALLY);
+
         bullet.transform.position = transform.position;
         bullet.transform.rotation = transform.rotation;
+
+        bullet.gameObject.SetActive(true);
     }
 }

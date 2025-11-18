@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7376323253763154485}
   - component: {fileID: 3270247535747037633}
   - component: {fileID: 3327915433273273998}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,8 +61,6 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -84,7 +82,6 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -99,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2925458415026959135}
   - component: {fileID: 8824662352586803435}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BulletSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,3 +132,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletSpawner
   bulletPrefab: {fileID: 7657643131921050495, guid: aecd3d47e02e3754ca3bbea9f3ada905, type: 3}
+  _spawnInterval: 0
