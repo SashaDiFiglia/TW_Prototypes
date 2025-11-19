@@ -6,6 +6,8 @@ public class Bullet : MonoBehaviour
     [SerializeField] private int _damage;
     [SerializeField] private float _lifeSpan;
     [SerializeField] private int _frameInterval;
+    [SerializeField] private MeshRenderer _renderer;
+
 
     [SerializeField] private Faction _dealsDamageTo;
 
@@ -21,7 +23,7 @@ public class Bullet : MonoBehaviour
 
         if (_frameCount % _frameInterval == 0)
         {
-            CheckPlayerHit();
+            CheckEntityHit();
             return;
         }
 
@@ -31,20 +33,28 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    private void CheckPlayerHit()
+    private void CheckEntityHit()
     {
-        var players = Physics.OverlapSphere(transform.position, 0.3f, 1 << (int)_dealsDamageTo);
+        var entities = Physics.OverlapSphere(transform.position, 0.3f, 1 << (int)_dealsDamageTo);
 
-        foreach (var player in players)
+        foreach (var entity in entities)
         {
-            if (player.TryGetComponent<PlayerParry>(out var hit))
+            if (entity.TryGetComponent<PlayerParry>(out var hit))
             {
-                Debug.Log("Player Hit");
+                //Debug.Log("Player Hit");
 
                 if (hit.TryGetHit(_damage, this))
                 {
                     OnHit?.Invoke(this);
+                    return;
                 }
+            }
+
+            if (entity.TryGetComponent<BulletSpawner>(out var spawner))
+            {
+                spawner.TakeDamage();
+
+                OnHit?.Invoke(this);
             }
         }
     }
@@ -54,9 +64,16 @@ public class Bullet : MonoBehaviour
         _dealsDamageTo = faction;
     }
 
+    public void SetColor(Color color)
+    {
+        _renderer.material.color = color;
+    }
+
     private void Reset()
     {
         _lifeTimer = 0f;
+
+        _renderer.material.color = Color.gray;
 
         OnHit?.Invoke(this);
     }

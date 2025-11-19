@@ -13,20 +13,25 @@ public class PlayerParry : MonoBehaviour
 
     [SerializeField] private MeshRenderer _shieldRenderer;
 
+    [SerializeField] private ParticleSystem _hitEffect;
 
-    private Coroutine _parryCoroutine;
+
+    private Coroutine parryCoroutine;
 
     public event Action<PlayerType, Bullet> OnBulletAbsorbed;
+    public event Action OnUIUpdate;
 
 
     public bool TryGetHit(int damage, Bullet bullet)
     {
-        if (_parryCoroutine != null)
+        if (parryCoroutine != null)
         {
             ParryBullet(bullet);
 
             return false;
         }
+
+        _hitEffect.Emit(5);
 
         Health -= damage;
 
@@ -35,7 +40,12 @@ public class PlayerParry : MonoBehaviour
 
     public void CallParryCoroutine(InputAction.CallbackContext obj)
     {
-        _parryCoroutine = StartCoroutine(ParryCoroutine());
+        if (parryCoroutine != null)
+        {
+            return;
+        }
+
+        parryCoroutine = StartCoroutine(ParryCoroutine());
     }
 
     private IEnumerator ParryCoroutine()
@@ -53,7 +63,7 @@ public class PlayerParry : MonoBehaviour
             yield return null;
         }
 
-        _parryCoroutine = null;
+        parryCoroutine = null;
 
         _shieldRenderer.enabled = false;
 
@@ -64,9 +74,11 @@ public class PlayerParry : MonoBehaviour
 
     private void ParryBullet(Bullet bullet)
     {
-        Debug.Log("Absorbing shot");
+        //Debug.Log("Absorbing shot");
 
         OnBulletAbsorbed?.Invoke(_playerType, bullet);
+
+        OnUIUpdate?.Invoke();
 
         //Destroy(bullet.gameObject);
     }

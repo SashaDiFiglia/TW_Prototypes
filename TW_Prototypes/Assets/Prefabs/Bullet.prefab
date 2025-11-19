@@ -50,6 +50,8 @@ MonoBehaviour:
   _damage: 1
   _lifeSpan: 5
   _frameInterval: 2
+  _renderer: {fileID: 4061708602650162447}
+  _dealsDamageTo: 0
 --- !u!114 &7754616239579030708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,7 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f9348ccb41b23247840a75d839f8707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletMovement
-  _moveSpeed: 2
+  _moveSpeed: 5
 --- !u!33 &9156198790165959038
 MeshFilter:
   m_ObjectHideFlags: 0

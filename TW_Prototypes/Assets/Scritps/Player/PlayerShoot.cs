@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerShoot : MonoBehaviour
 {
     private PlayerType playerType;
+
+    public event Action OnShoot;
 
     private void Awake()
     {
@@ -21,10 +24,14 @@ public class PlayerShoot : MonoBehaviour
             return;
         }
 
+        OnShoot?.Invoke();
+
         bullet.transform.position = transform.position;
         bullet.transform.rotation = transform.rotation;
 
         bullet.SetFactionToDealDamage(Faction.ENEMY);
+
+        bullet.SetColor(Color.white);
 
         bullet.gameObject.SetActive(true);
     }

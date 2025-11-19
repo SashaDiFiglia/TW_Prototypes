@@ -11,8 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputActionReference _moveAction;
     [SerializeField] private InputActionReference _parryAction;
     [SerializeField] private InputActionReference _shootAction;
-
-
+    
     private Vector2 moveVector;
 
     private Vector3 moveDir;

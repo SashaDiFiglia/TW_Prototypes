@@ -96,6 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2925458415026959135}
   - component: {fileID: 8824662352586803435}
+  - component: {fileID: 5869926176334946502}
   m_Layer: 3
   m_Name: BulletSpawner
   m_TagString: Untagged
@@ -133,3 +134,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BulletSpawner
   bulletPrefab: {fileID: 7657643131921050495, guid: aecd3d47e02e3754ca3bbea9f3ada905, type: 3}
   _spawnInterval: 0
+--- !u!65 &5869926176334946502
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722595628054847401}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
